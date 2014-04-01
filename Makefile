@@ -312,7 +312,8 @@ mrproper: fullclean
 PINNING_FILES=pinning/internals/header.m4 \
 	$(wildcard pinning/*/$(MCU).m4) \
 	$(wildcard pinning/internals/hackery_$(MCU).m4) \
-	$(wildcard pinning/hardware/$(HARDWARE).m4) pinning/internals/footer.m4
+	$(wildcard pinning/hardware/$(HARDWARE).m4) pinning/internals/footer.m4 \
+	services/autoc4/pinning.m4
 pinning.c: $(PINNING_FILES) autoconf.h
 	$(M4) -I$(TOPDIR)/pinning `scripts/m4-defines` $(PINNING_FILES) > $@
 

@@ -1,0 +1,7 @@
+dep_bool_menu "AutoC4 Lighting Endpoint" AUTOC4_SUPPORT $MQTT_SUPPORT
+  string "AutoC4 Config file path" AUTOC4_CONFIG_FILE "services/autoc4/config/sample.json"
+  int "AutoC4 DMX Universe" AUTOC4_DMX_UNIVERSE 0
+
+  comment  "Debugging Flags"
+  dep_bool 'AutoC4 Debug Messages' AUTOC4_DEBUG $DEBUG $AUTOC4_SUPPORT
+endmenu

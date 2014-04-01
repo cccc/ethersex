@@ -1,0 +1,20 @@
+{
+	"mqtt_ip": "172.23.23.110",
+	"mqtt_client_id": "keller",
+	"mqtt_user": null,
+	"mqtt_pass": null,
+	"mqtt_auto_subscribe": [
+		"licht/keller/+"
+	],
+
+	"outputs": [
+		["PD5", "licht/keller/aussen"],
+		["PD7", "licht/keller/innen"]
+	],
+
+	"inputs": [
+	],
+
+	"dmx_topic": null,
+	"dmx": []
+}

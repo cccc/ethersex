@@ -1,0 +1,27 @@
+{
+	"mqtt_ip": "172.23.23.110",
+	"mqtt_client_id": "plenarsaal",
+	"mqtt_user": null,
+	"mqtt_pass": null,
+	"mqtt_auto_subscribe": [
+		"licht/plenar/+"
+	],
+
+	"outputs": [
+		["PA4", "licht/plenar/vornewand"],
+		["PA5", "licht/plenar/vornefenster"],
+		["PA6", "licht/plenar/hintenfenster"],
+		["PA7", "licht/plenar/hintenwand"]
+	],
+
+	"inputs": [
+		["PD2", "schalter/plenar/vorne", false, false],
+		["PD3", "fenster/plenar/vornerechts", true, false],
+		["PD4", "fenster/plenar/vornelinks", true, false],
+		["PD5", "fenster/plenar/hintenrechts", true, false],
+		["PD6", "fenster/plenar/hintenlinks", true, false]
+	],
+
+	"dmx_topic": null,
+	"dmx": []
+}
