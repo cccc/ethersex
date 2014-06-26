@@ -23,6 +23,9 @@
 #define AUTOC4_H
 
 
+#include <stdbool.h>
+
+
 #include "config.h"
 
 #ifndef AUTOC4_MQTT_SUPPLY_USER
@@ -34,6 +37,36 @@
   #undef CONF_AUTOC4_MQTT_PASS
   #define CONF_AUTOC4_MQTT_PASS NULL
 #endif
+
+
+#if IO_HARD_PORTS == 3
+  #error Not implemented for this uC type
+#endif
+
+#define PORT_INDEX_A 0
+#define PORT_INDEX_B 1
+#define PORT_INDEX_C 2
+#define PORT_INDEX_D 3
+#define PORT_INDEX_E 4
+#define PORT_INDEX_F 5
+#define PORT_INDEX_G 6
+
+
+typedef struct {
+  uint8_t port_index, pin_index;
+  const char* topic;
+} autoc4_output_config;
+
+typedef struct {
+  uint8_t port_index, pin_index;
+  const char* topic;
+  bool pullup, inverted;
+} autoc4_input_config;
+
+typedef struct {
+  const char* topic;
+  uint16_t start_channel, channel_count;
+} autoc4_dmx_config;
 
 
 void autoc4_init(void);
