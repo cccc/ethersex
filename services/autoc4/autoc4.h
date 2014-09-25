@@ -69,6 +69,18 @@ typedef struct {
 } autoc4_dmx_config;
 
 
+typedef struct {
+  uint8_t output_count;
+  uint8_t input_count;
+  uint8_t dmx_count;
+  autoc4_output_config *output_configs;
+  autoc4_input_config *input_configs;
+  autoc4_dmx_config *dmx_configs;
+  const char *dmx_topic;
+  mqtt_connection_config_t *mqtt_con_config;
+} autoc4_config_t;
+
+
 void autoc4_init(void);
 
 

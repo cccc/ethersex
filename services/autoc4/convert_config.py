@@ -110,7 +110,7 @@ static void autoc4_autoconf_publish_callback(char const *topic,
     {% if dmx_topic %}
       else if (strncmp(topic, {{dmx_topic}}, topic_length) == 0)
       {
-        set_dmx_channels(payload, AUTOC4_DMX_UNIVERSE, payload_length);
+        set_dmx_channels(payload, AUTOC4_DMX_UNIVERSE, 1, payload_length);
       }
     {% endif %}
 
