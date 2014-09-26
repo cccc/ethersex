@@ -33,11 +33,6 @@ static mqtt_connection_config_t mqtt_config = {
   .will_message = NULL,
   .target_ip = { HTONS(((172) << 8) | (23)), HTONS(((23) << 8) | (110)) },
 
-  //.connack_callback = autoc4_connack_callback,
-  //.poll_callback = autoc4_poll,
-  //.close_callback = NULL,
-  //.publish_callback = autoc4_publish_callback,
-
   .auto_subscribe_topics = auto_subscribe_topics,
 };
 static autoc4_config_t config = {

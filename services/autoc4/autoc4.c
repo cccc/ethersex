@@ -137,10 +137,12 @@ static void autoc4_ddr_init(void)
 void
 autoc4_init(void)
 {
-  autoc4_config->mqtt_con_config->connack_callback = autoc4_connack_callback;
-  autoc4_config->mqtt_con_config->poll_callback = autoc4_poll;
-  autoc4_config->mqtt_con_config->close_callback = NULL;
-  autoc4_config->mqtt_con_config->publish_callback = autoc4_publish_callback;
+  mqtt_register_callback(&(mqtt_callback_config_t*) {
+      .connack_callback = autoc4_connack_callback;
+      .poll_callback = autoc4_poll;
+      .close_callback = NULL;
+      .publish_callback = autoc4_publish_callback;
+    });
 
   pin_input_states = malloc(autoc4_config->input_count);
 
