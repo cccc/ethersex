@@ -57,9 +57,9 @@ static void autoc4_connack_callback(void)
   {
     bool input = (bool) (*pins[autoc4_config->input_configs[i].port_index] & 1<<autoc4_config->input_configs[i].pin_index);
     if (input)
-      construct_publish_packet(autoc4_config->input_configs[i].topic, zero_one + (autoc4_config->input_configs[i].inverted ? 0 : 1), 1, true);
+      mqtt_construct_publish_packet(autoc4_config->input_configs[i].topic, zero_one + (autoc4_config->input_configs[i].inverted ? 0 : 1), 1, true);
     else
-      construct_publish_packet(autoc4_config->input_configs[i].topic, zero_one + (autoc4_config->input_configs[i].inverted ? 1 : 0), 1, true);
+      mqtt_construct_publish_packet(autoc4_config->input_configs[i].topic, zero_one + (autoc4_config->input_configs[i].inverted ? 1 : 0), 1, true);
     pin_input_states[i] = input;
   }
   */
@@ -79,9 +79,9 @@ static void autoc4_poll(void)
   {
     bool input = (bool) (*pins[autoc4_config->input_configs[i].port_index] & 1<<autoc4_config->input_configs[i].pin_index);
     if (input && !pin_input_states[i])
-      construct_publish_packet(autoc4_config->input_configs[i].topic, zero_one + (autoc4_config->input_configs[i].inverted ? 0 : 1), 1, true);
+      mqtt_construct_publish_packet(autoc4_config->input_configs[i].topic, zero_one + (autoc4_config->input_configs[i].inverted ? 0 : 1), 1, true);
     else if (!input && pin_input_states[i])
-      construct_publish_packet(autoc4_config->input_configs[i].topic, zero_one + (autoc4_config->input_configs[i].inverted ? 1 : 0), 1, true);
+      mqtt_construct_publish_packet(autoc4_config->input_configs[i].topic, zero_one + (autoc4_config->input_configs[i].inverted ? 1 : 0), 1, true);
     pin_input_states[i] = input;
   }
 }
@@ -137,11 +137,11 @@ static void autoc4_ddr_init(void)
 void
 autoc4_init(void)
 {
-  mqtt_register_callback(&(mqtt_callback_config_t*) {
-      .connack_callback = autoc4_connack_callback;
-      .poll_callback = autoc4_poll;
-      .close_callback = NULL;
-      .publish_callback = autoc4_publish_callback;
+  mqtt_register_callback(&(mqtt_callback_config_t) {
+      .connack_callback = autoc4_connack_callback,
+      .poll_callback = autoc4_poll,
+      .close_callback = NULL,
+      .publish_callback = autoc4_publish_callback,
     });
 
   pin_input_states = malloc(autoc4_config->input_count);
