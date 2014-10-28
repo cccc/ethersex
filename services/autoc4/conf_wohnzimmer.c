@@ -4,10 +4,12 @@ static autoc4_output_config outputs[] = {
   { PORT_INDEX_C, 3, "licht/wohnzimmer/kueche" },
   { PORT_INDEX_C, 4, "licht/wohnzimmer/mitte" },
   { PORT_INDEX_C, 5, "licht/wohnzimmer/tuer" },
+  { PORT_INDEX_D, 2, "licht/wohnzimmer/gang" },
 };
 static autoc4_input_config inputs[] = {
   { PORT_INDEX_C, 6, "schalter/wohnzimmer/links", false, false },
   { PORT_INDEX_C, 7, "schalter/wohnzimmer/rechts", false, false },
+  { PORT_INDEX_D, 4, "schalter/wohnzimmer/gang", true, false },
 };
 static autoc4_dmx_config dmxs[] = {
   {"dmx/wohnzimmer/mitte1",   1, 8},
@@ -28,8 +30,8 @@ static mqtt_connection_config_t mqtt_config = {
   .auto_subscribe_topics = auto_subscribe_topics,
 };
 static autoc4_config_t config = {
-  .output_count = 3,
-  .input_count = 2,
+  .output_count = 4,
+  .input_count = 3,
   .dmx_count = 3,
   .output_configs = outputs,
   .input_configs = inputs,
