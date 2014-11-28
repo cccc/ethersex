@@ -95,10 +95,20 @@ static void autoc4_publish_callback(char const *topic,
     for (int i=0; i<autoc4_config->output_count; i++)
       if (strncmp(topic, autoc4_config->output_configs[i].topic, topic_length) == 0)
       {
-        if (((uint8_t*)payload)[0])
-          *ports[autoc4_config->output_configs[i].port_index] |= 1<<autoc4_config->output_configs[i].pin_index;
+        if (autoc4_config->output_configs[i].opendrain)
+        {
+          if (((uint8_t*)payload)[0])
+            *ddrs[autoc4_config->output_configs[i].port_index] |= 1<<autoc4_config->output_configs[i].pin_index;
+          else
+            *ddrs[autoc4_config->output_configs[i].port_index] &= ~(1<<autoc4_config->output_configs[i].pin_index);
+        }
         else
-          *ports[autoc4_config->output_configs[i].port_index] &= ~(1<<autoc4_config->output_configs[i].pin_index);
+        {
+          if (((uint8_t*)payload)[0])
+            *ports[autoc4_config->output_configs[i].port_index] |= 1<<autoc4_config->output_configs[i].pin_index;
+          else
+            *ports[autoc4_config->output_configs[i].port_index] &= ~(1<<autoc4_config->output_configs[i].pin_index);
+        }
         return;
       }
 

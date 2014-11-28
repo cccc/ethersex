@@ -55,6 +55,7 @@
 typedef struct {
   uint8_t port_index, pin_index;
   const char* topic;
+  bool opendrain;
 } autoc4_output_config;
 
 typedef struct {

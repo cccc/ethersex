@@ -1,20 +1,20 @@
 #include "protocols/uip/uip.h"
 
 static autoc4_output_config outputs[] = {
-  { PORT_INDEX_C, 3, "licht/wohnzimmer/kueche" },
-  { PORT_INDEX_C, 4, "licht/wohnzimmer/mitte" },
-  { PORT_INDEX_C, 5, "licht/wohnzimmer/tuer" },
-  { PORT_INDEX_D, 2, "licht/wohnzimmer/gang" },
+  { PORT_INDEX_C, 3, "licht/wohnzimmer/kueche", false },
+  { PORT_INDEX_C, 4, "licht/wohnzimmer/mitte",  false },
+  { PORT_INDEX_C, 5, "licht/wohnzimmer/tuer",   false },
+  { PORT_INDEX_D, 2, "licht/wohnzimmer/gang",   false },
 };
 static autoc4_input_config inputs[] = {
-  { PORT_INDEX_C, 6, "schalter/wohnzimmer/links", false, false },
+  { PORT_INDEX_C, 6, "schalter/wohnzimmer/links",  false, false },
   { PORT_INDEX_C, 7, "schalter/wohnzimmer/rechts", false, false },
-  { PORT_INDEX_D, 4, "schalter/wohnzimmer/gang", true, false },
+  { PORT_INDEX_D, 4, "schalter/wohnzimmer/gang",   true,  false },
 };
 static autoc4_dmx_config dmxs[] = {
-  {"dmx/wohnzimmer/mitte1",   1, 8},
-  {"dmx/wohnzimmer/mitte2",   9, 8},
-  {"dmx/wohnzimmer/mitte3",  17, 8},
+  { "dmx/wohnzimmer/mitte1",   1, 8 },
+  { "dmx/wohnzimmer/mitte2",   9, 8 },
+  { "dmx/wohnzimmer/mitte3",  17, 8 },
 };
 static char const* const auto_subscribe_topics[] = { "licht/wohnzimmer/+","dmx/wohnzimmer/+","dmx/wohnzimmer", NULL };
 static mqtt_connection_config_t mqtt_config = {
