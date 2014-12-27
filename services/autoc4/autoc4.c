@@ -25,8 +25,7 @@
 #include "autoc4.h"
 #include "core/portio/portio.h"
 
-//#include "autoconfig.c"
-#include "services/autoc4/conf.c"
+#include AUTOC4_CONFIG_FILE
 
 //#include "protocols/uip/uip.h"
 #include "services/dmx-storage/dmx_storage.h"
