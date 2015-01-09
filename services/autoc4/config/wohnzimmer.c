@@ -1,10 +1,11 @@
 #include "protocols/uip/uip.h"
 
 static autoc4_output_config outputs[] = {
-  { PORT_INDEX_C, 3, "licht/wohnzimmer/kueche", false },
-  { PORT_INDEX_C, 4, "licht/wohnzimmer/mitte",  false },
-  { PORT_INDEX_C, 5, "licht/wohnzimmer/tuer",   false },
-  { PORT_INDEX_D, 2, "licht/wohnzimmer/gang",   false },
+  { PORT_INDEX_C, 3, "licht/wohnzimmer/kueche",       false },
+  { PORT_INDEX_C, 4, "licht/wohnzimmer/mitte",        false },
+  { PORT_INDEX_C, 5, "licht/wohnzimmer/tuer",         false },
+  { PORT_INDEX_D, 2, "licht/wohnzimmer/gang",         false },
+  { PORT_INDEX_D, 6, "power/wohnzimmer/kitchenlight", false },
 };
 static autoc4_input_config inputs[] = {
   { PORT_INDEX_C, 6, "schalter/wohnzimmer/links",  false, false },
@@ -16,7 +17,7 @@ static autoc4_dmx_config dmxs[] = {
   { "dmx/wohnzimmer/mitte2",   9, 8 },
   { "dmx/wohnzimmer/mitte3",  17, 8 },
 };
-static char const* const auto_subscribe_topics[] = { "licht/wohnzimmer/+","dmx/wohnzimmer/+","dmx/wohnzimmer", NULL };
+static char const* const auto_subscribe_topics[] = { "licht/wohnzimmer/+","dmx/wohnzimmer/+","dmx/wohnzimmer","power/wohnzimmer/+", NULL };
 static mqtt_connection_config_t mqtt_config = {
   .client_id = "wohnzimmer",
   .user = NULL,
@@ -30,7 +31,7 @@ static mqtt_connection_config_t mqtt_config = {
   .auto_subscribe_topics = auto_subscribe_topics,
 };
 static autoc4_config_t config = {
-  .output_count = 4,
+  .output_count = 5,
   .input_count = 3,
   .dmx_count = 3,
   .output_configs = outputs,
