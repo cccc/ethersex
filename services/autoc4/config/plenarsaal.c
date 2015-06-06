@@ -36,9 +36,9 @@ static mqtt_connection_config_t mqtt_config = {
   .auto_subscribe_topics = auto_subscribe_topics,
 };
 static autoc4_config_t config = {
-  .output_count = 4,
-  .input_count = 5,
-  .dmx_count = 7,
+  .output_count = sizeof(outputs) / sizeof(autoc4_output_config),
+  .input_count = sizeof(inputs) / sizeof(autoc4_input_config),
+  .dmx_count = sizeof(dmxs) / sizeof(autoc4_dmx_config),
   .output_configs = outputs,
   .input_configs = inputs,
   .dmx_configs = dmxs,
