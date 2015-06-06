@@ -13,9 +13,14 @@ static autoc4_input_config inputs[] = {
   { PORT_INDEX_D, 4, "schalter/wohnzimmer/gang",   true,  false },
 };
 static autoc4_dmx_config dmxs[] = {
-  { "dmx/wohnzimmer/mitte1",   1, 8 },
-  { "dmx/wohnzimmer/mitte2",   9, 8 },
-  { "dmx/wohnzimmer/mitte3",  17, 8 },
+  { "dmx/wohnzimmer/mitte1",     1, 8 },
+  { "dmx/wohnzimmer/mitte2",     9, 8 },
+  { "dmx/wohnzimmer/mitte3",    17, 8 },
+  { "dmx/wohnzimmer/tuer1",     25, 8 },
+  { "dmx/wohnzimmer/tuer2",     33, 8 },
+  { "dmx/wohnzimmer/tuer3",     41, 8 },
+  { "dmx/wohnzimmer/gang",      49, 8 },
+  { "dmx/wohnzimmer/baellebad", 57, 8 },
 };
 static char const* const auto_subscribe_topics[] = { "licht/wohnzimmer/+","dmx/wohnzimmer/+","dmx/wohnzimmer","power/wohnzimmer/+", NULL };
 static mqtt_connection_config_t mqtt_config = {
