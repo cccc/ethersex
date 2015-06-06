@@ -45,7 +45,15 @@ static volatile uint8_t *pins[] = IO_PIN_ARRAY;
 static autoc4_config_t *autoc4_config = &config;
 static bool *pin_input_states;
 
+typedef struct
+{
+  uint8_t value;
+  uint8_t timer;
+} autoc4_output_state_t;
+static autoc4_output_state_t *output_states;
 
+
+static const uint8_t blink_timeouts[4] = { 1, 5, 25, 30 }; // in 100 ms
 static const uint8_t zero_one[2] = { 0, 1 };
 
 
@@ -85,6 +93,29 @@ static void autoc4_poll(void)
   }
 }
 
+static void autoc4_set_output(uint8_t index, uint8_t state)
+{
+  if (autoc4_config->output_configs[index].opendrain)
+  {
+    if (state)
+      *ddrs[autoc4_config->output_configs[index].port_index] |= 1<<autoc4_config->output_configs[index].pin_index;
+    else
+      *ddrs[autoc4_config->output_configs[index].port_index] &= ~(1<<autoc4_config->output_configs[index].pin_index);
+  }
+  else
+  {
+    if (state)
+      *ports[autoc4_config->output_configs[index].port_index] |= 1<<autoc4_config->output_configs[index].pin_index;
+    else
+      *ports[autoc4_config->output_configs[index].port_index] &= ~(1<<autoc4_config->output_configs[index].pin_index);
+  }
+}
+static uint8_t autoc4_get_output(uint8_t index)
+{
+  return ((*ports[autoc4_config->output_configs[index].port_index] & (1<<autoc4_config->output_configs[index].pin_index)) != 0) // HIGH output
+    ||    ((*ddrs[autoc4_config->output_configs[index].port_index] & (1<<autoc4_config->output_configs[index].pin_index)) == 0);     // open drain, high Z
+}
+
 static void autoc4_publish_callback(char const *topic,
     uint16_t topic_length, const void *payload, uint16_t payload_length)
 {
@@ -94,20 +125,10 @@ static void autoc4_publish_callback(char const *topic,
     for (int i=0; i<autoc4_config->output_count; i++)
       if (strncmp(topic, autoc4_config->output_configs[i].topic, topic_length) == 0)
       {
-        if (autoc4_config->output_configs[i].opendrain)
-        {
-          if (((uint8_t*)payload)[0])
-            *ddrs[autoc4_config->output_configs[i].port_index] |= 1<<autoc4_config->output_configs[i].pin_index;
-          else
-            *ddrs[autoc4_config->output_configs[i].port_index] &= ~(1<<autoc4_config->output_configs[i].pin_index);
-        }
-        else
-        {
-          if (((uint8_t*)payload)[0])
-            *ports[autoc4_config->output_configs[i].port_index] |= 1<<autoc4_config->output_configs[i].pin_index;
-          else
-            *ports[autoc4_config->output_configs[i].port_index] &= ~(1<<autoc4_config->output_configs[i].pin_index);
-        }
+        // save value for blinking outputs
+        output_states[i].value = ((uint8_t*)payload)[0];
+        output_states[i].timer = 0;
+        autoc4_set_output(i, ((uint8_t*)payload)[0]);
         return;
       }
 
@@ -143,6 +164,63 @@ static void autoc4_ddr_init(void)
 }
 
 
+static void autoc4_poll_blinking(void)
+{
+  for (int i=0; i<autoc4_config->output_count; i++)
+  {
+    if (!autoc4_config->output_configs[i].enable_blinking)
+      continue;
+
+    if (output_states[i].value == 0)
+    {
+      autoc4_set_output(i, 0);
+      continue;
+    }
+
+    if (output_states[i].timer == 0)
+    {
+      // check current output level
+      if (autoc4_get_output(i))
+      {
+        // output HIGH
+
+        // set timer
+        output_states[i].timer = blink_timeouts[(output_states[i].value & 0xc0) >> 6] * (((output_states[i].value & 0x30)>>4) + 1);
+
+        // special case, value == 0b0000 -> don't set output
+        if (output_states[i].timer == 1)
+          return;
+
+        // toggle output
+        autoc4_set_output(i, 0);
+      }
+      else
+      {
+        // output LOW
+
+        // set timer
+        output_states[i].timer = blink_timeouts[(output_states[i].value & 0x0c) >> 2] * (((output_states[i].value & 0x03)>>0) + 1);
+
+        // special case, value == 0b0000 -> don't set output
+        if (output_states[i].timer == 1)
+          return;
+
+        // toggle it
+        autoc4_set_output(i, 1);
+      }
+    }
+
+    output_states[i].timer--;
+  }
+}
+
+
+void
+autoc4_periodic(void)
+{
+  autoc4_poll_blinking();
+}
+
 void
 autoc4_init(void)
 {
@@ -154,6 +232,7 @@ autoc4_init(void)
     });
 
   pin_input_states = malloc(autoc4_config->input_count);
+  output_states = malloc(autoc4_config->output_count * sizeof(autoc4_output_state_t));
 
   autoc4_ddr_init();
   mqtt_set_connection_config(autoc4_config->mqtt_con_config);
@@ -163,4 +242,5 @@ autoc4_init(void)
   -- Ethersex META --
   header(services/autoc4/autoc4.h)
   init(autoc4_init)
+  timer(10, autoc4_periodic())
 */

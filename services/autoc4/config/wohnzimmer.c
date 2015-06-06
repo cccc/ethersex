@@ -1,11 +1,11 @@
 #include "protocols/uip/uip.h"
 
 static autoc4_output_config outputs[] = {
-  { PORT_INDEX_C, 3, "licht/wohnzimmer/kueche",       false },
-  { PORT_INDEX_C, 4, "licht/wohnzimmer/mitte",        false },
-  { PORT_INDEX_C, 5, "licht/wohnzimmer/tuer",         false },
-  { PORT_INDEX_D, 2, "licht/wohnzimmer/gang",         false },
-  { PORT_INDEX_D, 6, "power/wohnzimmer/kitchenlight", false },
+  { PORT_INDEX_C, 3, "licht/wohnzimmer/kueche",       false, false },
+  { PORT_INDEX_C, 4, "licht/wohnzimmer/mitte",        false, false },
+  { PORT_INDEX_C, 5, "licht/wohnzimmer/tuer",         false, false },
+  { PORT_INDEX_D, 2, "licht/wohnzimmer/gang",         false, false },
+  { PORT_INDEX_D, 6, "power/wohnzimmer/kitchenlight", false, false },
 };
 static autoc4_input_config inputs[] = {
   { PORT_INDEX_C, 6, "schalter/wohnzimmer/links",  false, false },

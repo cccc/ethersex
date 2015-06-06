@@ -56,6 +56,7 @@ typedef struct {
   uint8_t port_index, pin_index;
   const char* topic;
   bool opendrain;
+  bool enable_blinking;
 } autoc4_output_config;
 
 typedef struct {
@@ -83,6 +84,7 @@ typedef struct {
 
 
 void autoc4_init(void);
+void autoc4_periodic(void);
 
 
 #endif /* MOTD_H */

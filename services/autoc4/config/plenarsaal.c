@@ -1,10 +1,10 @@
 #include "protocols/uip/uip.h"
 
 static autoc4_output_config outputs[] = {
-  { PORT_INDEX_A, 4, "licht/plenar/vornefenster",  false },
-  { PORT_INDEX_A, 5, "licht/plenar/vornewand",     false },
-  { PORT_INDEX_A, 6, "licht/plenar/hintenfenster", false },
-  { PORT_INDEX_A, 7, "licht/plenar/hintenwand",    false },
+  { PORT_INDEX_A, 4, "licht/plenar/vornefenster",  false, false },
+  { PORT_INDEX_A, 5, "licht/plenar/vornewand",     false, false },
+  { PORT_INDEX_A, 6, "licht/plenar/hintenfenster", false, false },
+  { PORT_INDEX_A, 7, "licht/plenar/hintenwand",    false, false },
 };
 static autoc4_input_config inputs[] = {
   { PORT_INDEX_D, 2, "schalter/plenar/vorne",       false, false },

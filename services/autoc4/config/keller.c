@@ -1,8 +1,8 @@
 #include "protocols/uip/uip.h"
 
 static autoc4_output_config outputs[] = {
-  { PORT_INDEX_D, 5, "licht/keller/aussen", false },
-  { PORT_INDEX_D, 7, "licht/keller/innen",  false },
+  { PORT_INDEX_D, 5, "licht/keller/aussen", false, false },
+  { PORT_INDEX_D, 7, "licht/keller/innen",  false, false },
 };
 static autoc4_input_config inputs[] = {
 };

@@ -1,8 +1,8 @@
 #include "protocols/uip/uip.h"
 
 static autoc4_output_config outputs[] = {
-  { PORT_INDEX_A, 0, "licht/fnord/links",  false },
-  { PORT_INDEX_A, 1, "licht/fnord/rechts", false },
+  { PORT_INDEX_A, 0, "licht/fnord/links",  false, false },
+  { PORT_INDEX_A, 1, "licht/fnord/rechts", false, false },
 };
 static autoc4_input_config inputs[] = {
   { PORT_INDEX_D, 2, "schalter/fnord/links", true, false },
