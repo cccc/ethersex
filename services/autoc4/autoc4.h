@@ -54,19 +54,19 @@
 
 typedef struct {
   uint8_t port_index, pin_index;
-  const char* topic;
+  PGM_P topic;
   bool opendrain;
   bool enable_blinking;
 } autoc4_output_config;
 
 typedef struct {
   uint8_t port_index, pin_index;
-  const char* topic;
+  PGM_P topic;
   bool pullup, inverted;
 } autoc4_input_config;
 
 typedef struct {
-  const char* topic;
+  PGM_P topic;
   uint16_t start_channel, channel_count;
 } autoc4_dmx_config;
 
@@ -78,7 +78,7 @@ typedef struct {
   autoc4_output_config *output_configs;
   autoc4_input_config *input_configs;
   autoc4_dmx_config *dmx_configs;
-  const char *dmx_topic;
+  PGM_P dmx_topic;
   mqtt_connection_config_t *mqtt_con_config;
 } autoc4_config_t;
 

@@ -86,9 +86,9 @@ static void autoc4_poll(void)
   {
     bool input = (bool) (*pins[autoc4_config->input_configs[i].port_index] & 1<<autoc4_config->input_configs[i].pin_index);
     if (input && !pin_input_states[i])
-      mqtt_construct_publish_packet(autoc4_config->input_configs[i].topic, zero_one + (autoc4_config->input_configs[i].inverted ? 0 : 1), 1, true);
+      mqtt_construct_publish_packet_P(autoc4_config->input_configs[i].topic, zero_one + (autoc4_config->input_configs[i].inverted ? 0 : 1), 1, true);
     else if (!input && pin_input_states[i])
-      mqtt_construct_publish_packet(autoc4_config->input_configs[i].topic, zero_one + (autoc4_config->input_configs[i].inverted ? 1 : 0), 1, true);
+      mqtt_construct_publish_packet_P(autoc4_config->input_configs[i].topic, zero_one + (autoc4_config->input_configs[i].inverted ? 1 : 0), 1, true);
     pin_input_states[i] = input;
   }
 }
@@ -123,7 +123,7 @@ static void autoc4_publish_callback(char const *topic,
   {
     // Set digital outputs
     for (int i=0; i<autoc4_config->output_count; i++)
-      if (strncmp(topic, autoc4_config->output_configs[i].topic, topic_length) == 0)
+      if (strncmp_P(topic, autoc4_config->output_configs[i].topic, topic_length) == 0)
       {
         // save value for blinking outputs
         output_states[i].value = ((uint8_t*)payload)[0];
@@ -133,7 +133,7 @@ static void autoc4_publish_callback(char const *topic,
       }
 
     // Set raw DMX channels
-    if (strncmp(topic, autoc4_config->dmx_topic, topic_length) == 0)
+    if (strncmp_P(topic, autoc4_config->dmx_topic, topic_length) == 0)
     {
       set_dmx_channels(payload, AUTOC4_DMX_UNIVERSE, 0, payload_length);
       return;
@@ -141,7 +141,7 @@ static void autoc4_publish_callback(char const *topic,
 
     // Set individual DMX devices
     for (int i=0; i<autoc4_config->dmx_count; i++)
-      if (strncmp(topic, autoc4_config->dmx_configs[i].topic, topic_length) == 0)
+      if (strncmp_P(topic, autoc4_config->dmx_configs[i].topic, topic_length) == 0)
       {
         if (payload_length > autoc4_config->dmx_configs[i].channel_count)
           payload_length = autoc4_config->dmx_configs[i].channel_count;

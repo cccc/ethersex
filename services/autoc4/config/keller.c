@@ -1,19 +1,34 @@
 #include "protocols/uip/uip.h"
 
+static const char string_output_1[]  PROGMEM = "licht/keller/aussen";
+static const char string_output_2[]  PROGMEM = "licht/keller/innen";
+static const char string_output_3[]  PROGMEM = "licht/keller/vorne";
+
+static const char string_input_1[]   PROGMEM = "schalter/keller/1";
+static const char string_input_2[]   PROGMEM = "schalter/keller/2";
+
+static const char string_autosub_1[] PROGMEM = "licht/keller/+";
+
+static const char string_client_id[] PROGMEM = "keller";
+
+
 static autoc4_output_config outputs[] = {
-  { PORT_INDEX_D, 5, "licht/keller/aussen", false, false },
-  { PORT_INDEX_D, 7, "licht/keller/innen",  false, false },
-  { PORT_INDEX_C, 0, "licht/keller/vorne",  false, false },
+  { PORT_INDEX_D, 5, string_output_1, false, false },
+  { PORT_INDEX_D, 7, string_output_2, false, false },
+  { PORT_INDEX_C, 0, string_output_3, false, false },
 };
 static autoc4_input_config inputs[] = {
-  { PORT_INDEX_C, 1, "schalter/keller/1", true, false },
-  { PORT_INDEX_C, 2, "schalter/keller/2", true, false },
+  { PORT_INDEX_C, 1, string_input_1, true, false },
+  { PORT_INDEX_C, 2, string_input_2, true, false },
 };
 static autoc4_dmx_config dmxs[] = {
 };
-static char const* const auto_subscribe_topics[] = { "licht/keller/+", NULL };
+static PGM_P const auto_subscribe_topics[] = {
+  string_autosub_1,
+  NULL
+};
 static mqtt_connection_config_t mqtt_config = {
-  .client_id = "keller",
+  .client_id = string_client_id,
   .user = NULL,
   .pass = NULL,
   .will_topic = NULL,

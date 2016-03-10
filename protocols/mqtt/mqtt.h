@@ -105,19 +105,20 @@ typedef struct
 
 typedef struct
 {
-  char const *client_id;
+  PGM_P client_id;
   char const *user;
   char const *pass;
-  char const *will_topic; // A value != NULL enables the will feature
+  PGM_P will_topic; // A value != NULL enables the will feature
   uint8_t will_qos;
   bool will_retain;
-  char const *will_message;
+  const void *will_message;
+  uint16_t will_message_length;
   uip_ipaddr_t target_ip;
 
   // Pointer to an array of (char const*) of topic strings to be automatically
   // subscribed to after a connection is established. The array is assumed to
   // be NULL-terminated.
-  char const * const *auto_subscribe_topics;
+  PGM_P const *auto_subscribe_topics;
 } mqtt_connection_config_t;
 
 
@@ -132,7 +133,10 @@ bool mqtt_is_connected(void);
 // return false if there is not enough buffer space
 bool mqtt_construct_publish_packet(char const *topic, const void *payload,
     uint16_t payload_length, bool retain);
+bool mqtt_construct_publish_packet_P(PGM_P topic, const void *payload,
+    uint16_t payload_length, bool retain);
 bool mqtt_construct_subscribe_packet(char const *topic);
+bool mqtt_construct_subscribe_packet_P(PGM_P topic);
 bool mqtt_construct_unsubscribe_packet(char const *topic);
 bool mqtt_construct_zerolength_packet(uint8_t msg_type);
 bool mqtt_construct_ack_packet(uint8_t msg_type, uint16_t msgid);

@@ -1,30 +1,63 @@
 #include "protocols/uip/uip.h"
 
+static const char string_output_1[]  PROGMEM = "licht/wohnzimmer/kueche";
+static const char string_output_2[]  PROGMEM = "licht/wohnzimmer/mitte";
+static const char string_output_3[]  PROGMEM = "licht/wohnzimmer/tuer";
+static const char string_output_4[]  PROGMEM = "licht/wohnzimmer/gang";
+static const char string_output_5[]  PROGMEM = "power/wohnzimmer/kitchenlight";
+
+static const char string_input_1[]   PROGMEM = "schalter/wohnzimmer/links";
+static const char string_input_2[]   PROGMEM = "schalter/wohnzimmer/rechts";
+static const char string_input_3[]   PROGMEM = "schalter/wohnzimmer/gang";
+
+static const char string_dmx_1[]     PROGMEM = "dmx/wohnzimmer/mitte1";
+static const char string_dmx_2[]     PROGMEM = "dmx/wohnzimmer/mitte2";
+static const char string_dmx_3[]     PROGMEM = "dmx/wohnzimmer/mitte3";
+static const char string_dmx_4[]     PROGMEM = "dmx/wohnzimmer/tuer1";
+static const char string_dmx_5[]     PROGMEM = "dmx/wohnzimmer/tuer2";
+static const char string_dmx_6[]     PROGMEM = "dmx/wohnzimmer/tuer3";
+static const char string_dmx_7[]     PROGMEM = "dmx/wohnzimmer/gang";
+static const char string_dmx_8[]     PROGMEM = "dmx/wohnzimmer/baellebad";
+
+static const char string_autosub_1[] PROGMEM = "licht/wohnzimmer/+";
+static const char string_autosub_2[] PROGMEM = "dmx/wohnzimmer/+";
+static const char string_autosub_3[] PROGMEM = "dmx/wohnzimmer";
+static const char string_autosub_4[] PROGMEM = "power/wohnzimmer/+";
+
+static const char string_client_id[] PROGMEM = "wohnzimmer";
+
+
 static autoc4_output_config outputs[] = {
-  { PORT_INDEX_C, 3, "licht/wohnzimmer/kueche",       false, false },
-  { PORT_INDEX_C, 4, "licht/wohnzimmer/mitte",        false, false },
-  { PORT_INDEX_C, 5, "licht/wohnzimmer/tuer",         false, false },
-  { PORT_INDEX_D, 2, "licht/wohnzimmer/gang",         false, false },
-  { PORT_INDEX_D, 6, "power/wohnzimmer/kitchenlight", false, false },
+  { PORT_INDEX_C, 3, string_output_1, false, false },
+  { PORT_INDEX_C, 4, string_output_2, false, false },
+  { PORT_INDEX_C, 5, string_output_3, false, false },
+  { PORT_INDEX_D, 2, string_output_4, false, false },
+  { PORT_INDEX_D, 6, string_output_5, false, false },
 };
 static autoc4_input_config inputs[] = {
-  { PORT_INDEX_C, 6, "schalter/wohnzimmer/links",  false, false },
-  { PORT_INDEX_C, 7, "schalter/wohnzimmer/rechts", false, false },
-  { PORT_INDEX_D, 4, "schalter/wohnzimmer/gang",   true,  false },
+  { PORT_INDEX_C, 6, string_input_1, false, false },
+  { PORT_INDEX_C, 7, string_input_2, false, false },
+  { PORT_INDEX_D, 4, string_input_3, true,  false },
 };
 static autoc4_dmx_config dmxs[] = {
-  { "dmx/wohnzimmer/mitte1",     1, 8 },
-  { "dmx/wohnzimmer/mitte2",     9, 8 },
-  { "dmx/wohnzimmer/mitte3",    17, 8 },
-  { "dmx/wohnzimmer/tuer1",     25, 8 },
-  { "dmx/wohnzimmer/tuer2",     33, 8 },
-  { "dmx/wohnzimmer/tuer3",     41, 8 },
-  { "dmx/wohnzimmer/gang",      49, 8 },
-  { "dmx/wohnzimmer/baellebad", 57, 8 },
+  { string_dmx_1,  1, 8 },
+  { string_dmx_2,  9, 8 },
+  { string_dmx_3, 17, 8 },
+  { string_dmx_4, 25, 8 },
+  { string_dmx_5, 33, 8 },
+  { string_dmx_6, 41, 8 },
+  { string_dmx_7, 49, 8 },
+  { string_dmx_8, 57, 8 },
 };
-static char const* const auto_subscribe_topics[] = { "licht/wohnzimmer/+","dmx/wohnzimmer/+","dmx/wohnzimmer","power/wohnzimmer/+", NULL };
+static PGM_P const auto_subscribe_topics[] = {
+  string_autosub_1,
+  string_autosub_2,
+  string_autosub_3,
+  string_autosub_4,
+  NULL
+};
 static mqtt_connection_config_t mqtt_config = {
-  .client_id = "wohnzimmer",
+  .client_id = string_client_id,
   .user = NULL,
   .pass = NULL,
   .will_topic = NULL,
