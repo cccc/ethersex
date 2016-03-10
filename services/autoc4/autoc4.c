@@ -78,6 +78,9 @@ static void autoc4_connack_callback(void)
   for (int i=0; i<autoc4_config->input_count; i++)
     pin_input_states[i] = 1;
   autoc4_poll();
+
+  // send heartbeat message
+  mqtt_construct_publish_packet_P(string_heartbeat, zero_one + 1, 1, true);
 }
 
 static void autoc4_poll(void)

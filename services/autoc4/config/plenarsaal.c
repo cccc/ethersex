@@ -24,6 +24,8 @@ static const char string_autosub_2[] PROGMEM = "dmx/plenar/+";
 static const char string_autosub_3[] PROGMEM = "dmx/plenar";
 
 static const char string_client_id[] PROGMEM = "plenarsaal";
+static const char string_heartbeat[] PROGMEM = "heartbeat/plenarsaal";
+static const uint8_t will_message[]  = { 0x00 };
 
 
 static autoc4_output_config outputs[] = {
@@ -58,10 +60,11 @@ static mqtt_connection_config_t mqtt_config = {
   .client_id = string_client_id,
   .user = NULL,
   .pass = NULL,
-  .will_topic = NULL,
+  .will_topic = string_heartbeat,
   .will_qos = 0,
-  .will_retain = 0,
-  .will_message = NULL,
+  .will_retain = 1,
+  .will_message = will_message,
+  .will_message_length = sizeof(will_message),
   .target_ip = { HTONS(((172) << 8) | (23)), HTONS(((23) << 8) | (110)) },
 
   .auto_subscribe_topics = auto_subscribe_topics,
