@@ -42,6 +42,8 @@ static volatile uint8_t *ports[] = IO_PORT_ARRAY;
 static volatile uint8_t *pins[] = IO_PIN_ARRAY;
 
 
+static bool logicer_state;
+
 static autoc4_config_t *autoc4_config = &config;
 static bool *pin_input_states;
 
@@ -80,7 +82,9 @@ static void autoc4_connack_callback(void)
   autoc4_poll();
 
   // send heartbeat message
-  mqtt_construct_publish_packet_P(string_heartbeat, zero_one + 1, 1, true);
+  mqtt_construct_publish_packet_P(string_heartbeat_topic, zero_one + 1, 1, true);
+
+  logicer_state = false;
 }
 
 static void autoc4_poll(void)
@@ -151,6 +155,13 @@ static void autoc4_publish_callback(char const *topic,
         set_dmx_channels(payload, AUTOC4_DMX_UNIVERSE, autoc4_config->dmx_configs[i].start_channel - 1, payload_length);
         return;
       }
+
+    // Save logicer heartbeat state
+    if (strncmp_P(topic, string_logicer_heartbeat_topic, topic_length) == 0)
+    {
+      logicer_state = (bool) ((uint8_t*)payload)[0];
+      return;
+    }
   }
 }
 
@@ -236,6 +247,8 @@ autoc4_init(void)
 
   pin_input_states = malloc(autoc4_config->input_count);
   output_states = malloc(autoc4_config->output_count * sizeof(autoc4_output_state_t));
+
+  logicer_state = false;
 
   autoc4_ddr_init();
   mqtt_set_connection_config(autoc4_config->mqtt_con_config);

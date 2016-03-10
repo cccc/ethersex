@@ -25,7 +25,8 @@ static const char string_autosub_3[] PROGMEM = "dmx/wohnzimmer";
 static const char string_autosub_4[] PROGMEM = "power/wohnzimmer/+";
 
 static const char string_client_id[] PROGMEM = "wohnzimmer";
-static const char string_heartbeat[] PROGMEM = "heartbeat/wohnzimmer";
+static const char string_heartbeat_topic[] PROGMEM = "heartbeat/wohnzimmer";
+static const char string_logicer_heartbeat_topic[] PROGMEM = "heartbeat/logicer";
 static const uint8_t will_message[]  = { 0x00 };
 
 
@@ -56,13 +57,14 @@ static PGM_P const auto_subscribe_topics[] = {
   string_autosub_2,
   string_autosub_3,
   string_autosub_4,
+  string_logicer_heartbeat_topic,
   NULL
 };
 static mqtt_connection_config_t mqtt_config = {
   .client_id = string_client_id,
   .user = NULL,
   .pass = NULL,
-  .will_topic = string_heartbeat,
+  .will_topic = string_heartbeat_topic,
   .will_qos = 0,
   .will_retain = 1,
   .will_message = will_message,
