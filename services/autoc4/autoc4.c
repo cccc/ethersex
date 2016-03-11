@@ -36,6 +36,7 @@ static void autoc4_poll(void);
 static void autoc4_publish_callback(char const *topic, uint16_t topic_length,
     const void *payload, uint16_t payload_length);
 
+static void autoc4_emergency_switch_toggled(void);
 static void autoc4_read_inputs(void);
 static void autoc4_init_input_states(void);
 static void autoc4_set_output(uint8_t index, uint8_t state);
@@ -67,6 +68,32 @@ static autoc4_output_state_t *output_states;
 
 static const uint8_t blink_timeouts[4] = { 1, 5, 25, 30 }; // in 100 ms
 static const uint8_t zero_one[2] = { 0, 1 };
+
+
+static void autoc4_emergency_switch_toggled(void)
+{
+  // zero dmx
+  for (uint16_t channel=0; channel<DMX_STORAGE_CHANNELS; channel++)
+    set_dmx_channel(AUTOC4_DMX_UNIVERSE, channel, 0);
+
+  // check if any outputs that should be toggled are active
+  uint8_t any_output_on = 0;
+  for (uint8_t i=0; i<autoc4_config->output_count; i++)
+    if (autoc4_config->output_configs[i].emergency_toggled && autoc4_get_output(i))
+    {
+      any_output_on = 1;
+      break;
+    }
+
+  // toggle/zero outputs, depending on configuration
+  for (uint8_t i=0; i<autoc4_config->output_count; i++)
+  {
+    if (autoc4_config->output_configs[i].emergency_toggled)
+      autoc4_set_output(i, !any_output_on);
+    else if (autoc4_config->output_configs[i].emergency_zeroed)
+      autoc4_set_output(i, 0);
+  }
+}
 
 
 static void autoc4_connack_callback(void)
@@ -252,7 +279,17 @@ static void autoc4_read_inputs(void)
     bool input = (bool) (*pins[autoc4_config->input_configs[i].port_index] & 1<<autoc4_config->input_configs[i].pin_index);
     if ((input && !pin_input_states[i].prev_state) || (!input && pin_input_states[i].prev_state)) // input has changed
     {
+      if (!mqtt_is_connected() || !logicer_state)
+      {
+        // Emergency switch mode
+        if (autoc4_config->input_configs[i].is_emergency_switch)
+          autoc4_emergency_switch_toggled();
+      }
+      else
+      {
+        // Normal mode
         pin_input_states[i].mqtt_dirty = true;
+      }
     }
     pin_input_states[i].prev_state = input;
   }

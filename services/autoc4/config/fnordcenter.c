@@ -21,11 +21,11 @@ static const uint8_t will_message[]  = { 0x00 };
 
 
 static autoc4_output_config outputs[] = {
-  { PORT_INDEX_A, 0, string_output_1, false, false },
-  { PORT_INDEX_A, 1, string_output_2, false, false },
+  { PORT_INDEX_A, 0, string_output_1, false, false, true, false },
+  { PORT_INDEX_A, 1, string_output_2, false, false, true, false },
 };
 static autoc4_input_config inputs[] = {
-  { PORT_INDEX_D, 2, string_input_1, true, false },
+  { PORT_INDEX_D, 2, string_input_1, true, false, true },
 };
 static autoc4_dmx_config dmxs[] = {
   { string_dmx_1,  1, 4 },

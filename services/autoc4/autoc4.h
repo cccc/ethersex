@@ -57,12 +57,15 @@ typedef struct {
   PGM_P topic;
   bool opendrain;
   bool enable_blinking;
+  bool emergency_toggled;
+  bool emergency_zeroed;
 } autoc4_output_config;
 
 typedef struct {
   uint8_t port_index, pin_index;
   PGM_P topic;
   bool pullup, inverted;
+  bool is_emergency_switch;
 } autoc4_input_config;
 
 typedef struct {

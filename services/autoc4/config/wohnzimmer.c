@@ -31,16 +31,16 @@ static const uint8_t will_message[]  = { 0x00 };
 
 
 static autoc4_output_config outputs[] = {
-  { PORT_INDEX_C, 3, string_output_1, false, false },
-  { PORT_INDEX_C, 4, string_output_2, false, false },
-  { PORT_INDEX_C, 5, string_output_3, false, false },
-  { PORT_INDEX_D, 2, string_output_4, false, false },
-  { PORT_INDEX_D, 6, string_output_5, false, false },
+  { PORT_INDEX_C, 3, string_output_1, false, false, true,  false },
+  { PORT_INDEX_C, 4, string_output_2, false, false, true,  false },
+  { PORT_INDEX_C, 5, string_output_3, false, false, true,  false },
+  { PORT_INDEX_D, 2, string_output_4, false, false, true,  false },
+  { PORT_INDEX_D, 6, string_output_5, false, false, false, true  },
 };
 static autoc4_input_config inputs[] = {
-  { PORT_INDEX_C, 6, string_input_1, false, false },
-  { PORT_INDEX_C, 7, string_input_2, false, false },
-  { PORT_INDEX_D, 4, string_input_3, true,  false },
+  { PORT_INDEX_C, 6, string_input_1, false, false, true  },
+  { PORT_INDEX_C, 7, string_input_2, false, false, false },
+  { PORT_INDEX_D, 4, string_input_3, true,  false, true  },
 };
 static autoc4_dmx_config dmxs[] = {
   { string_dmx_1,  1, 8 },
