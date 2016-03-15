@@ -36,6 +36,11 @@ static void autoc4_poll(void);
 static void autoc4_publish_callback(char const *topic, uint16_t topic_length,
     const void *payload, uint16_t payload_length);
 
+static void autoc4_read_inputs(void);
+static void autoc4_init_input_states(void);
+static void autoc4_set_output(uint8_t index, uint8_t state);
+static uint8_t autoc4_get_output(uint8_t index);
+
 
 static volatile uint8_t *ddrs[] = IO_DDR_ARRAY;
 static volatile uint8_t *ports[] = IO_PORT_ARRAY;
@@ -45,8 +50,13 @@ static volatile uint8_t *pins[] = IO_PIN_ARRAY;
 static bool logicer_state;
 
 static autoc4_config_t *autoc4_config = &config;
-static bool *pin_input_states;
 
+typedef struct
+{
+  bool prev_state;
+  bool mqtt_dirty; // whether there is a new state to be published
+} autoc4_input_state_t;
+static autoc4_input_state_t *pin_input_states;
 typedef struct
 {
   uint8_t value;
@@ -61,25 +71,9 @@ static const uint8_t zero_one[2] = { 0, 1 };
 
 static void autoc4_connack_callback(void)
 {
-  /*
+  // mark every input as dirty, queue for mqtt resending
   for (int i=0; i<autoc4_config->input_count; i++)
-  {
-    bool input = (bool) (*pins[autoc4_config->input_configs[i].port_index] & 1<<autoc4_config->input_configs[i].pin_index);
-    if (input)
-      mqtt_construct_publish_packet(autoc4_config->input_configs[i].topic, zero_one + (autoc4_config->input_configs[i].inverted ? 0 : 1), 1, true);
-    else
-      mqtt_construct_publish_packet(autoc4_config->input_configs[i].topic, zero_one + (autoc4_config->input_configs[i].inverted ? 1 : 0), 1, true);
-    pin_input_states[i] = input;
-  }
-  */
-
-  // same effect, reduced code size?
-  for (int i=0; i<autoc4_config->input_count; i++)
-    pin_input_states[i] = 0;
-  autoc4_poll();
-  for (int i=0; i<autoc4_config->input_count; i++)
-    pin_input_states[i] = 1;
-  autoc4_poll();
+    pin_input_states[i].mqtt_dirty = true;
 
   // send heartbeat message
   mqtt_construct_publish_packet_P(string_heartbeat_topic, zero_one + 1, 1, true);
@@ -90,14 +84,26 @@ static void autoc4_connack_callback(void)
 static void autoc4_poll(void)
 {
   for (int i=0; i<autoc4_config->input_count; i++)
-  {
-    bool input = (bool) (*pins[autoc4_config->input_configs[i].port_index] & 1<<autoc4_config->input_configs[i].pin_index);
-    if (input && !pin_input_states[i])
-      mqtt_construct_publish_packet_P(autoc4_config->input_configs[i].topic, zero_one + (autoc4_config->input_configs[i].inverted ? 0 : 1), 1, true);
-    else if (!input && pin_input_states[i])
-      mqtt_construct_publish_packet_P(autoc4_config->input_configs[i].topic, zero_one + (autoc4_config->input_configs[i].inverted ? 1 : 0), 1, true);
-    pin_input_states[i] = input;
-  }
+    if (pin_input_states[i].mqtt_dirty)
+    {
+      const uint8_t *data;
+
+      if (pin_input_states[i].prev_state)
+        data = zero_one + (autoc4_config->input_configs[i].inverted ? 1 : 0);
+      else
+        data = zero_one + (autoc4_config->input_configs[i].inverted ? 0 : 1);
+
+      if (mqtt_construct_publish_packet_P(autoc4_config->input_configs[i].topic, data, 1, true))
+      {
+        // publish successful
+        pin_input_states[i].mqtt_dirty = false;
+      }
+      else
+      {
+        // the mqtt buffer might be full, cancel sending more publishes
+        return;
+      }
+    }
 }
 
 static void autoc4_set_output(uint8_t index, uint8_t state)
@@ -229,10 +235,42 @@ static void autoc4_poll_blinking(void)
 }
 
 
+static void autoc4_init_input_states(void)
+{
+  for (int i=0; i<autoc4_config->input_count; i++)
+  {
+    bool input = (bool) (*pins[autoc4_config->input_configs[i].port_index] & 1<<autoc4_config->input_configs[i].pin_index);
+    pin_input_states[i].prev_state = input;
+    pin_input_states[i].mqtt_dirty = true;
+  }
+}
+
+static void autoc4_read_inputs(void)
+{
+  for (int i=0; i<autoc4_config->input_count; i++)
+  {
+    bool input = (bool) (*pins[autoc4_config->input_configs[i].port_index] & 1<<autoc4_config->input_configs[i].pin_index);
+    if ((input && !pin_input_states[i].prev_state) || (!input && pin_input_states[i].prev_state)) // input has changed
+    {
+        pin_input_states[i].mqtt_dirty = true;
+    }
+    pin_input_states[i].prev_state = input;
+  }
+}
+
+
 void
 autoc4_periodic(void)
 {
-  autoc4_poll_blinking();
+  static uint8_t counter = 10;
+  if (--counter == 0)
+  {
+    // every 100ms
+    counter = 10;
+    autoc4_poll_blinking();
+  }
+
+  autoc4_read_inputs();
 }
 
 void
@@ -245,12 +283,13 @@ autoc4_init(void)
       .publish_callback = autoc4_publish_callback,
     });
 
-  pin_input_states = malloc(autoc4_config->input_count);
+  pin_input_states = malloc(autoc4_config->input_count * sizeof(autoc4_input_state_t));
   output_states = malloc(autoc4_config->output_count * sizeof(autoc4_output_state_t));
 
   logicer_state = false;
 
   autoc4_ddr_init();
+  autoc4_init_input_states();
   mqtt_set_connection_config(autoc4_config->mqtt_con_config);
 }
 
@@ -258,5 +297,5 @@ autoc4_init(void)
   -- Ethersex META --
   header(services/autoc4/autoc4.h)
   init(autoc4_init)
-  timer(10, autoc4_periodic())
+  timer(1, autoc4_periodic())
 */
