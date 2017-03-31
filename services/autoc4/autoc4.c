@@ -29,6 +29,7 @@
 
 //#include "protocols/uip/uip.h"
 #include "services/dmx-storage/dmx_storage.h"
+#include "hardware/ws2812b/ws2812b.h"
 
 
 static void autoc4_connack_callback(void);
@@ -41,6 +42,9 @@ static void autoc4_read_inputs(void);
 static void autoc4_init_input_states(void);
 static void autoc4_set_output(uint8_t index, uint8_t state);
 static uint8_t autoc4_get_output(uint8_t index);
+
+static void autoc4_init_status_light(void);
+static void autoc4_update_status_light(void);
 
 
 static volatile uint8_t *ddrs[] = IO_DDR_ARRAY;
@@ -296,15 +300,45 @@ static void autoc4_read_inputs(void)
 }
 
 
+static void
+autoc4_init_status_light(void)
+{
+  // power and output pin
+  DDRB |= (1<<PB0) | (1<<PB1);
+
+  // power on
+  PORTB |= (1<<PB0);
+}
+
+static void
+autoc4_update_status_light(void)
+{
+  if (!mqtt_is_connected())
+    ws2812b_write_rgb_n(0xff, 0x00, 0x00, 4);
+  else if (!logicer_state)
+    ws2812b_write_rgb_n(0xff, 0xff, 0x00, 4);
+  else
+    ws2812b_write_rgb_n(0x00, 0x00, 0xff, 4);
+}
+
+
 void
 autoc4_periodic(void)
 {
-  static uint8_t counter = 10;
-  if (--counter == 0)
+  static uint8_t counter_100ms = 10;
+  if (--counter_100ms == 0)
   {
     // every 100ms
-    counter = 10;
+    counter_100ms = 10;
     autoc4_poll_blinking();
+  }
+
+  static uint8_t counter_1s = 100;
+  if (--counter_1s == 0)
+  {
+    // every 1s
+    counter_1s = 100;
+    autoc4_update_status_light();
   }
 
   autoc4_read_inputs();
@@ -320,6 +354,9 @@ const PROGMEM mqtt_callback_config_t callback_config = {
 void
 autoc4_init(void)
 {
+  ws2812b_init();
+  autoc4_init_status_light();
+
   mqtt_register_callback(&callback_config);
 
   pin_input_states = malloc(autoc4_config->input_count * sizeof(autoc4_input_state_t));
