@@ -9,6 +9,11 @@ ifdef(`conf_ONEWIRE', `dnl
   ONEWIRE_PORT_RANGE(PD6, PD6)
 ')dnl
 
+ifdef(`conf_WS2812B', `dnl
+  /* ws2812b pin */
+  pin(WS2812B, PA7)
+')dnl
+
 ifdef(`conf_SD_READER', `dnl
   /* port the sd-reader CS is attached to */
   pin(SPI_CS_SD_READER, PB2, OUTPUT)

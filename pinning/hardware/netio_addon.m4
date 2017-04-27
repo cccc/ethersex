@@ -3,6 +3,11 @@ ifdef(`conf_ONEWIRE', `dnl
   ONEWIRE_PORT_RANGE(PC2, PC2)
 ')dnl
 
+ifdef(`conf_WS2812B', `dnl
+  /* ws2812b pin */
+  pin(WS2812B, PA7)
+')dnl
+
 
 /* port the enc28j60 is attached to */
 pin(SPI_CS_NET, SPI_CS_HARDWARE)

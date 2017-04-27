@@ -125,7 +125,12 @@ FNORD
 
 template $ONEWIRE_SUPPORT << FNORD
   /* onewire port range */
-   ONEWIRE_PORT_RANGE(PC0, PC0)
+  ONEWIRE_PORT_RANGE(PC0, PC0)
+FNORD
+
+template $WS2812B_SUPPORT << FNORD
+  /* ws2812b pin */
+  pin(WS2812B, PA7)
 FNORD
 
 template $RC5_SUPPORT << FNORD
