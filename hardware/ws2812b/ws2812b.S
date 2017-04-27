@@ -121,11 +121,11 @@ ws2812b_write_rgb_n:
 
 ws2812b_write_rgb_n_loop:
   mov r24, r22
-  call ws2812b_write_byte
+  rcall ws2812b_write_byte
   mov r24, r23
-  call ws2812b_write_byte
+  rcall ws2812b_write_byte
   mov r24, r20
-  call ws2812b_write_byte
+  rcall ws2812b_write_byte
 
   subi r18, 1
   brne ws2812b_write_rgb_n_loop
