@@ -1,7 +1,7 @@
 #include "protocols/uip/uip.h"
 
-static const char string_output_1[]  PROGMEM = "licht/keller/aussen";
-static const char string_output_2[]  PROGMEM = "licht/keller/innen";
+static const char string_output_1[]  PROGMEM = "licht/keller/mitte";
+static const char string_output_2[]  PROGMEM = "licht/keller/loet";
 static const char string_output_3[]  PROGMEM = "licht/keller/vorne";
 
 static const char string_input_1[]   PROGMEM = "schalter/keller/1";
@@ -16,8 +16,8 @@ static const uint8_t will_message[]  = { 0x00 };
 
 
 static autoc4_output_config outputs[] = {
-  { PORT_INDEX_D, 5, string_output_1, false, false, true, false },
-  { PORT_INDEX_D, 7, string_output_2, false, false, true, false },
+  { PORT_INDEX_D, 4, string_output_1, false, false, true, false },
+  { PORT_INDEX_D, 6, string_output_2, false, false, true, false },
   { PORT_INDEX_C, 0, string_output_3, false, false, true, false },
 };
 static autoc4_input_config inputs[] = {
