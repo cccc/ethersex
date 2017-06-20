@@ -4,21 +4,21 @@ dnl
 dnl   Copyright (c) 2008 by Christian Dietrich <stettberger@dokucode.de>
 dnl   Copyright (c) 2008,2009 by Stefan Siegl <stesie@brokenpipe.de>
 dnl   Copyright (c) 2008 by Jochen Roessner <jochen@lugrot.de>
-dnl  
+dnl
 dnl   This program is free software; you can redistribute it and/or modify
-dnl   it under the terms of the GNU General Public License as published by 
+dnl   it under the terms of the GNU General Public License as published by
 dnl   the Free Software Foundation; either version 3 of the License, or
 dnl   (at your option) any later version.
-dnl  
+dnl
 dnl   This program is distributed in the hope that it will be useful,
 dnl   but WITHOUT ANY WARRANTY; without even the implied warranty of
 dnl   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 dnl   GNU General Public License for more details.
-dnl  
+dnl
 dnl   You should have received a copy of the GNU General Public License
 dnl   along with this program; if not, write to the Free Software
 dnl   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-dnl  
+dnl
 dnl   For more information on the GPL, please go to:
 dnl   http://www.gnu.org/copyleft/gpl.html
 dnl
@@ -60,6 +60,10 @@ define(`port_mask_D', 0)
 define(`port_mask_E', 0)
 define(`port_mask_F', 0)
 define(`port_mask_G', 0)
+define(`port_mask_H', 0)
+define(`port_mask_J', 0)
+define(`port_mask_K', 0)
+define(`port_mask_L', 0)
 
 define(`ddr_mask_A', 0)
 define(`ddr_mask_B', 0)
@@ -68,6 +72,10 @@ define(`ddr_mask_D', 0)
 define(`ddr_mask_E', 0)
 define(`ddr_mask_F', 0)
 define(`ddr_mask_G', 0)
+define(`ddr_mask_H', 0)
+define(`ddr_mask_J', 0)
+define(`ddr_mask_K', 0)
+define(`ddr_mask_L', 0)
 
 dnl forloop-implementation from gnu m4 example scripts ...
 # forloop(var, from, to, stmt) - simple version
@@ -376,9 +384,139 @@ define(`HD44780_PCF8574x_MAPPING', `dnl
 #define HD44780_PCF8574x_DB6 ($7)
 #define HD44780_PCF8574x_DB7 ($8)
 #define HD44780_PCF8574x_BL ($9)
+#define HD44780_PCF8574x_EN1 HD44780_PCF8574x_EN
 ')
 
-divert(1)
+dnl Map LCD with multiple HD44780 to PCF8574x I2C-Expander
+dnl
+dnl HD44780_PCF8574x_MULTI_MAPPING(ADR,RS,RW,EN1,EN2,DB4,DB5,DB6,DB7)
+dnl ADR - PCF8574x I2C address
+dnl RS, RW, EN1, EN2 - LCD control
+dnl DB4..DB7 - LCD data (4-Bit mode)
+dnl
+dnl Note: Map PCF8574x PORT-numbers, not Pin-Numbers.
+define(`HD44780_PCF8574x_MULTI_MAPPING', `dnl
+
+/* Map LCD with multiple HD44780 (e.g. WDC2704M))
+ * to PCF8574x connection
+ */
+#define HD44780_PCF8574x_ADR ($1)
+#define HD44780_PCF8574x_RS ($2)
+#define HD44780_PCF8574x_WR ($3)
+#define HD44780_PCF8574x_EN1 ($4)
+#define HD44780_PCF8574x_EN2 ($5)
+#define HD44780_PCF8574x_DB4 ($6)
+#define HD44780_PCF8574x_DB5 ($7)
+#define HD44780_PCF8574x_DB6 ($8)
+#define HD44780_PCF8574x_DB7 ($9)
+')
+
+dnl Map HD44780-LCD connector to MCP23017 I2C-Expander
+dnl - map all LCD pins to a single MCP23017 port
+dnl
+dnl HD44780_MCP23017_MAPPING(ADR,PORT,RS,RW,EN,DB4,DB5,DB6,DB7,BL)
+dnl ADR - MCP23017 I2C address
+dnl PORT - MCP23017 Port, either A or B (Mixed pins are not supported!)
+dnl RS, RW, EN - LCD control
+dnl DB4..DB7 - LCD data (4-Bit mode)
+dnl BL - Backlight
+dnl
+dnl Note: Map MCP23017 PORT-numbers, not Pin-Numbers.
+define(`HD44780_MCP23017_MAPPING', `dnl
+
+/* Map HD44780 LCD to MCP23017 connection
+ */
+#define HD44780_MCP23017_ADR ($1)
+#define HD44780_MCP23017_RS ($3)
+#define HD44780_MCP23017_WR ($4)
+#define HD44780_MCP23017_EN ($5)
+#define HD44780_MCP23017_DB4 ($6)
+#define HD44780_MCP23017_DB5 ($7)
+#define HD44780_MCP23017_DB6 ($8)
+#define HD44780_MCP23017_DB7 ($9)
+#define HD44780_MCP23017_BL ($10)
+#define HD44780_MCP23017_EN1 HD44780_MCP23017_EN
+
+/* MCP23017 registers required for I/O */
+#define HD44780_MCP23017_IODIR _paste(MCP23017_IODIR, $2)
+#define HD44780_MCP23017_OLAT  _paste(MCP23017_OLAT, $2)
+#define HD44780_MCP23017_GPIO  _paste(MCP23017_GPIO, $2)
+')
+
+dnl Map LCD with multiple HD44780 to MCP23017 I2C-Expander
+dnl - map all LCD pins to a single MCP23017 port
+dnl
+dnl HD44780_MCP23017_MULTI_MAPPING(ADR,PORT,RS,RW,EN1,EN2,DB4,DB5,DB6,DB7)
+dnl ADR - MCP23017 I2C address
+dnl PORT - MCP23017 Port, either A or B (Mixed pins are not supported!)
+dnl RS, RW, EN1, EN2 - LCD control
+dnl DB4..DB7 - LCD data (4-Bit mode)
+dnl
+dnl Note: Map MCP23017 PORT-numbers, not Pin-Numbers.
+define(`HD44780_MCP23017_MULTI_MAPPING', `dnl
+
+/* Map LCD with multiple HD44780 (e.g. WDC2704M))
+ * to MCP23017 connection
+ */
+#define HD44780_MCP23017_ADR ($1)
+#define HD44780_MCP23017_RS ($3)
+#define HD44780_MCP23017_WR ($4)
+#define HD44780_MCP23017_EN1 ($5)
+#define HD44780_MCP23017_EN2 ($6)
+#define HD44780_MCP23017_DB4 ($7)
+#define HD44780_MCP23017_DB5 ($8)
+#define HD44780_MCP23017_DB6 ($9)
+#define HD44780_MCP23017_DB7 ($10)
+
+/* MCP23017 registers required for I/O */
+#define HD44780_MCP23017_IODIR _paste(MCP23017_IODIR, $2)
+#define HD44780_MCP23017_OLAT  _paste(MCP23017_OLAT, $2)
+#define HD44780_MCP23017_GPIO  _paste(MCP23017_GPIO, $2)
+')
+
+dnl Backlight support for LCDs with multiple HD44780 connected
+dnl to MCP23017 I2C-Expander
+dnl
+dnl HD44780_MCP23017_MULTI_MAPPING_BL(ADR,PORT,BL)
+dnl ADR - MCP23017 I2C address
+dnl PORT - MCP23017 Port, either A or B (Mixed pins are not supported!)
+dnl BL - Backlight
+dnl
+dnl Note: Map MCP23017 PORT-numbers, not Pin-Numbers.
+define(`HD44780_MCP23017_MULTI_MAPPING_BL', `dnl
+
+/* Map Backlight for LCDs with multiple HD44780 (e.g. WDC2704M))
+ * to MCP23017 connection
+ */
+#define HD44780_MCP23017_BL_ADR ($1)
+#define HD44780_MCP23017_BL ($3)
+
+/* MCP23017 registers required for I/O */
+#define HD44780_MCP23017_BL_IODIR _paste(MCP23017_IODIR, $2)
+#define HD44780_MCP23017_BL_OLAT  _paste(MCP23017_OLAT, $2)
+#define HD44780_MCP23017_BL_GPIO  _paste(MCP23017_GPIO, $2)
+')
+
+
+define(`PERIODIC_USE_TIMER', `dnl
+
+/* Configure 16 Bit timer/counter used from core/periodic.
+ * Default is timer/counter unit 1, but some MCUs support
+ * a second 16 Bit timer/counter unit numbered 3.
+ */
+#define PERIODIC_MODE_PWMFAST_OCR     format(TC%s_MODE_PWMFAST_OCR, $1)
+#define PERIODIC_PRESCALER_1          format(TC%s_PRESCALER_1, $1)
+#define PERIODIC_PRESCALER_8          format(TC%s_PRESCALER_8, $1)
+#define PERIODIC_PRESCALER_64         format(TC%s_PRESCALER_64, $1)
+#define PERIODIC_INT_COMPARE_ON       format(TC%s_INT_COMPARE_ON, $1)
+#define PERIODIC_INT_OVERFLOW_ON      format(TC%s_INT_OVERFLOW_ON, $1)
+#define PERIODIC_COUNTER_CURRENT      format(TC%s_COUNTER_CURRENT, $1)
+#define PERIODIC_COUNTER_COMPARE      format(TC%s_COUNTER_COMPARE, $1)
+#define PERIODIC_VECTOR_COMPARE       format(TC%s_VECTOR_COMPARE, $1)
+#define PERIODIC_VECTOR_OVERFLOW      format(TC%s_VECTOR_OVERFLOW, $1)
+')
+
+divert(define_divert)
 `
 #ifndef _PINNING_HEADER
 #define _PINNING_HEADER
@@ -409,3 +547,5 @@ divert(1)
 #define PIN_PULSE(pin) do { PORT_CHAR(pin ## _PORT) &= ~_BV(pin ## _PIN); \
                             PORT_CHAR(pin ## _PORT) ^=  _BV(pin ## _PIN); \
                           } while(0)'
+
+PERIODIC_USE_TIMER(value_PERIODIC_USE_TIMER)

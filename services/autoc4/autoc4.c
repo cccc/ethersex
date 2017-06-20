@@ -310,15 +310,17 @@ autoc4_periodic(void)
   autoc4_read_inputs();
 }
 
+const PROGMEM mqtt_callback_config_t callback_config = {
+    .connack_callback = autoc4_connack_callback,
+    .poll_callback = autoc4_poll,
+    .close_callback = NULL,
+    .publish_callback = autoc4_publish_callback,
+  };
+
 void
 autoc4_init(void)
 {
-  mqtt_register_callback(&(mqtt_callback_config_t) {
-      .connack_callback = autoc4_connack_callback,
-      .poll_callback = autoc4_poll,
-      .close_callback = NULL,
-      .publish_callback = autoc4_publish_callback,
-    });
+  mqtt_register_callback(&callback_config);
 
   pin_input_states = malloc(autoc4_config->input_count * sizeof(autoc4_input_state_t));
   output_states = malloc(autoc4_config->output_count * sizeof(autoc4_output_state_t));
