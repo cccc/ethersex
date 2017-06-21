@@ -43,6 +43,7 @@ static void autoc4_init_input_states(void);
 static void autoc4_set_output(uint8_t index, uint8_t state);
 static uint8_t autoc4_get_output(uint8_t index);
 
+static void autoc4_init_fan_control(void);
 static void autoc4_init_status_light(void);
 static void autoc4_update_status_light(void);
 
@@ -301,6 +302,14 @@ static void autoc4_read_inputs(void)
 
 
 static void
+autoc4_init_fan_control(void)
+{
+  // simply turn on
+  DDRD |= (1<<PD7);
+  PORTD |= (1<<PD7);
+}
+
+static void
 autoc4_init_status_light(void)
 {
   // power and output pin
@@ -356,6 +365,7 @@ autoc4_init(void)
 {
   ws2812b_init();
   autoc4_init_status_light();
+  autoc4_init_fan_control();
 
   mqtt_register_callback(&callback_config);
 
