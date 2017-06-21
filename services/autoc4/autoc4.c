@@ -54,6 +54,7 @@ static volatile uint8_t *pins[] = IO_PIN_ARRAY;
 
 
 static bool logicer_state;
+static bool locked_mode;
 
 static autoc4_config_t *autoc4_config = &config;
 
@@ -161,9 +162,24 @@ static uint8_t autoc4_get_output(uint8_t index)
     ||    ((*ddrs[autoc4_config->output_configs[index].port_index] & (1<<autoc4_config->output_configs[index].pin_index)) == 0);     // open drain, high Z
 }
 
+
+static const char string_sudo_prefix[] PROGMEM = "sudo/";
+
 static void autoc4_publish_callback(char const *topic,
     uint16_t topic_length, const void *payload, uint16_t payload_length)
 {
+  if (topic_length >= sizeof(string_sudo_prefix) && strncmp_P(topic, string_sudo_prefix, sizeof(string_sudo_prefix)-1) == 0)
+  {
+    // sudo message, ignore locked mode
+    topic += sizeof(string_sudo_prefix) - 1;
+    // fall through
+  }
+  else if (locked_mode)
+  {
+    // non-sudo message, ignore
+    return;
+  }
+
   if (payload_length > 0)
   {
     // Set digital outputs
@@ -198,6 +214,13 @@ static void autoc4_publish_callback(char const *topic,
     if (strncmp_P(topic, string_logicer_heartbeat_topic, topic_length) == 0)
     {
       logicer_state = (bool) ((uint8_t*)payload)[0];
+      return;
+    }
+
+    // Enter locked mode
+    if (strncmp_P(topic, string_locked_mode_topic, topic_length) == 0)
+    {
+      locked_mode = true;
       return;
     }
   }
@@ -322,12 +345,14 @@ autoc4_init_status_light(void)
 static void
 autoc4_update_status_light(void)
 {
+  uint8_t blue = locked_mode ? 0xff : 0x00;
+
   if (!mqtt_is_connected())
-    ws2812b_write_rgb_n(0xff, 0x00, 0x00, 4);
+    ws2812b_write_rgb_n(0xff, 0x00, blue, 4);
   else if (!logicer_state)
-    ws2812b_write_rgb_n(0xff, 0xff, 0x00, 4);
+    ws2812b_write_rgb_n(0xff, 0xff, blue, 4);
   else
-    ws2812b_write_rgb_n(0x00, 0x00, 0xff, 4);
+    ws2812b_write_rgb_n(0x00, 0xff, blue, 4);
 }
 
 
@@ -373,6 +398,7 @@ autoc4_init(void)
   output_states = malloc(autoc4_config->output_count * sizeof(autoc4_output_state_t));
 
   logicer_state = false;
+  locked_mode = true;
 
   autoc4_ddr_init();
   autoc4_init_input_states();

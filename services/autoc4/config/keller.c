@@ -11,7 +11,9 @@ static const char string_autosub_1[] PROGMEM = "licht/keller/+";
 
 static const char string_client_id[] PROGMEM = "keller";
 static const char string_heartbeat_topic[] PROGMEM = "heartbeat/keller";
+static const char string_locked_mode_topic[] PROGMEM = "lock/keller";
 static const char string_logicer_heartbeat_topic[] PROGMEM = "heartbeat/logicer";
+static const char string_subscribe_sudo[] PROGMEM = "sudo/#";
 static const uint8_t will_message[]  = { 0x00 };
 
 
@@ -29,6 +31,7 @@ static autoc4_dmx_config dmxs[] = {
 static PGM_P const auto_subscribe_topics[] = {
   string_autosub_1,
   string_logicer_heartbeat_topic,
+  string_subscribe_sudo,
   NULL
 };
 static mqtt_connection_config_t mqtt_config = {
