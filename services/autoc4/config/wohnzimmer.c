@@ -9,6 +9,8 @@ static const char string_output_5[]  PROGMEM = "power/wohnzimmer/kitchenlight";
 static const char string_input_1[]   PROGMEM = "schalter/wohnzimmer/links";
 static const char string_input_2[]   PROGMEM = "schalter/wohnzimmer/rechts";
 static const char string_input_3[]   PROGMEM = "schalter/wohnzimmer/gang";
+static const char string_input_4[]   PROGMEM = "fenster/wohnzimmer/links";
+static const char string_input_5[]   PROGMEM = "fenster/wohnzimmer/rechts";
 
 static const char string_dmx_1[]     PROGMEM = "dmx/wohnzimmer/mitte1";
 static const char string_dmx_2[]     PROGMEM = "dmx/wohnzimmer/mitte2";
@@ -36,13 +38,15 @@ static autoc4_output_config outputs[] = {
   { PORT_INDEX_C, 3, string_output_1, false, false, true,  false },
   { PORT_INDEX_C, 4, string_output_2, false, false, true,  false },
   { PORT_INDEX_C, 5, string_output_3, false, false, true,  false },
-  { PORT_INDEX_D, 2, string_output_4, false, false, true,  false },
+  { PORT_INDEX_D, 5, string_output_4, false, false, true,  false },
   { PORT_INDEX_D, 6, string_output_5, false, false, false, true  },
 };
 static autoc4_input_config inputs[] = {
   { PORT_INDEX_C, 6, string_input_1, false, false, true  },
   { PORT_INDEX_C, 7, string_input_2, false, false, false },
-  { PORT_INDEX_D, 4, string_input_3, true,  false, true  },
+  { PORT_INDEX_A, 7, string_input_3, true,  false, true  },
+  { PORT_INDEX_A, 1, string_input_4, true,  false, false },
+  { PORT_INDEX_A, 5, string_input_5, true,  false, false },
 };
 static autoc4_dmx_config dmxs[] = {
   { string_dmx_1,  1, 8 },
