@@ -33,6 +33,8 @@ static const char string_logicer_heartbeat_topic[] PROGMEM = "heartbeat/logicer"
 static const char string_subscribe_sudo[] PROGMEM = "sudo/#";
 static const uint8_t will_message[]  = { 0x00 };
 
+static const char string_fan_topic[] PROGMEM = "etherrape/wohnzimmer/fan";
+static const char string_status_led_topic[] PROGMEM = "etherrape/wohnzimmer/statusled";
 static const char string_locked_mode_topic[] PROGMEM = "etherrape/wohnzimmer/lock";
 
 

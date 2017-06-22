@@ -55,6 +55,7 @@ static volatile uint8_t *pins[] = IO_PIN_ARRAY;
 
 static bool logicer_state;
 static bool locked_mode;
+static uint8_t status_led_value;
 
 static autoc4_config_t *autoc4_config = &config;
 
@@ -223,6 +224,20 @@ static void autoc4_publish_callback(char const *topic,
       locked_mode = (bool) ((uint8_t*)payload)[0];
       return;
     }
+
+    // Set status led brightness
+    if (strncmp_P(topic, string_status_led_topic, topic_length) == 0)
+    {
+      status_led_value = ((uint8_t*)payload)[0];
+      return;
+    }
+
+    // Set fan pwm value
+    if (strncmp_P(topic, string_fan_topic, topic_length) == 0)
+    {
+      OCR2A = ((uint8_t*)payload)[0];
+      return;
+    }
   }
 }
 
@@ -350,14 +365,15 @@ autoc4_init_status_light(void)
 static void
 autoc4_update_status_light(void)
 {
-  uint8_t blue = locked_mode ? 0xff : 0x00;
+  uint8_t v = status_led_value;
+  uint8_t blue = locked_mode ? v : 0x00;
 
   if (!mqtt_is_connected())
-    ws2812b_write_rgb_n(0xff, 0x00, blue, 4);
+    ws2812b_write_rgb_n(v, 0x00, blue, 4);
   else if (!logicer_state)
-    ws2812b_write_rgb_n(0xff, 0xff, blue, 4);
+    ws2812b_write_rgb_n(v, v, blue, 4);
   else
-    ws2812b_write_rgb_n(0x00, 0xff, blue, 4);
+    ws2812b_write_rgb_n(0x00, v, blue, 4);
 }
 
 
