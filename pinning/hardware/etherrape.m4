@@ -1,8 +1,12 @@
 /* port the enc28j60 is attached to */
-pin(SPI_CS_NET, SPI_CS_HARDWARE)
+ifdef(`conf_ENC28J60_SUPPORT', `dnl
+  pin(SPI_CS_NET, SPI_CS_HARDWARE)
+')dnl
 
 /* port the dataflash CS is attached to */
-pin(SPI_CS_DF, PB1, OUTPUT)
+ifdef(`conf_DATAFLASH_SUPPORT', `dnl
+  pin(SPI_CS_DF, PB1, OUTPUT)
+')dnl
 
 ifdef(`conf_ONEWIRE', `dnl
   /* onewire port range */
