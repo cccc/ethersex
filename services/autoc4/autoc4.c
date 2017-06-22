@@ -398,7 +398,7 @@ autoc4_init(void)
   output_states = malloc(autoc4_config->output_count * sizeof(autoc4_output_state_t));
 
   logicer_state = false;
-  locked_mode = true;
+  locked_mode = false;
 
   autoc4_ddr_init();
   autoc4_init_input_states();
