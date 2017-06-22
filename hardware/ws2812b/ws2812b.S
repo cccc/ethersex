@@ -23,9 +23,9 @@
 
 #include <avr/io.h>
 
-#define WS2812B_PORT   PORT_CHAR(WS2812B_PORT)
-#define WS2812B_DDR    DDR_CHAR(WS2812B_PORT)
-#define WS2812B_PINNUM PIN_NR(WS2812B)
+#define WS2812B_PORT   PORTB
+#define WS2812B_DDR    DDRB
+#define WS2812B_PINNUM PB1
 
 
 .global ws2812b_init
