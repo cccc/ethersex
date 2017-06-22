@@ -220,7 +220,7 @@ static void autoc4_publish_callback(char const *topic,
     // Enter locked mode
     if (strncmp_P(topic, string_locked_mode_topic, topic_length) == 0)
     {
-      locked_mode = true;
+      locked_mode = (bool) ((uint8_t*)payload)[0];
       return;
     }
   }
