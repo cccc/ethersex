@@ -47,10 +47,10 @@ static autoc4_output_config outputs[] = {
 };
 static autoc4_input_config inputs[] = {
   { PORT_INDEX_C, 6, string_input_1, false, false, true  },
-  { PORT_INDEX_C, 7, string_input_2, false, false, false },
+  { PORT_INDEX_C, 7, string_input_2, false, true,  false },
   { PORT_INDEX_A, 7, string_input_3, true,  false, true  },
-  { PORT_INDEX_A, 1, string_input_4, true,  false, false },
-  { PORT_INDEX_A, 5, string_input_5, true,  false, false },
+  { PORT_INDEX_A, 1, string_input_4, true,  true,  false },
+  { PORT_INDEX_A, 5, string_input_5, true,  true,  false },
 };
 static autoc4_dmx_config dmxs[] = {
   { string_dmx_1,  1, 8 },
