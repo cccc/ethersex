@@ -1,7 +1,5 @@
 /* port the enc28j60 is attached to */
-ifdef(`conf_ENC28J60_SUPPORT', `dnl
-  pin(SPI_CS_NET, SPI_CS_HARDWARE)
-')dnl
+pin(SPI_CS_NET, SPI_CS_HARDWARE)
 
 /* port the dataflash CS is attached to */
 ifdef(`conf_DATAFLASH_SUPPORT', `dnl
