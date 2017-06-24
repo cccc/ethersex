@@ -420,6 +420,7 @@ autoc4_init(void)
 
   logicer_state = false;
   locked_mode = false;
+  status_led_value = 0x10;
 
   autoc4_ddr_init();
   autoc4_init_input_states();
