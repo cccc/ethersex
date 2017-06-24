@@ -349,7 +349,7 @@ autoc4_init_fan_control(void)
   // use pwm
   TCCR2A = (1<<COM2A1) | (0<<COM2A0) | (1<<WGM21) | (1<<WGM20);
   TCCR2B = (0<<CS22) | (0<<CS21) | (1<<CS20);
-  OCR2A = 0x40;
+  OCR2A = 0xff;
 }
 
 static void
