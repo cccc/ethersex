@@ -96,9 +96,15 @@ static void autoc4_emergency_switch_toggled(void)
   for (uint8_t i=0; i<autoc4_config->output_count; i++)
   {
     if (autoc4_config->output_configs[i].emergency_toggled)
+    {
+      output_states[i].value = !any_output_on;
       autoc4_set_output(i, !any_output_on);
+    }
     else if (autoc4_config->output_configs[i].emergency_zeroed)
+    {
+      output_states[i].value = 0;
       autoc4_set_output(i, 0);
+    }
   }
 }
 
@@ -279,7 +285,7 @@ static void autoc4_poll_blinking(void)
 
         // special case, value == 0b0000 -> don't set output
         if (output_states[i].timer == 1)
-          return;
+          continue;
 
         // toggle output
         autoc4_set_output(i, 0);
@@ -293,9 +299,9 @@ static void autoc4_poll_blinking(void)
 
         // special case, value == 0b0000 -> don't set output
         if (output_states[i].timer == 1)
-          return;
+          continue;
 
-        // toggle it
+        // toggle output
         autoc4_set_output(i, 1);
       }
     }
