@@ -22,27 +22,32 @@ static const char string_dmx_7[]     PROGMEM = "dmx/plenar/hinten4";
 static const char string_autosub_1[] PROGMEM = "licht/plenar/+";
 static const char string_autosub_2[] PROGMEM = "dmx/plenar/+";
 static const char string_autosub_3[] PROGMEM = "dmx/plenar";
+static const char string_autosub_4[] PROGMEM = "power/plenar/+";
+static const char string_autosub_5[] PROGMEM = "etherrape/plenar/+";
 
 static const char string_client_id[] PROGMEM = "plenarsaal";
 static const char string_heartbeat_topic[] PROGMEM = "heartbeat/plenarsaal";
-static const char string_locked_mode_topic[] PROGMEM = "lock/plenar";
 static const char string_logicer_heartbeat_topic[] PROGMEM = "heartbeat/logicer";
 static const char string_subscribe_sudo[] PROGMEM = "sudo/#";
 static const uint8_t will_message[]  = { 0x00 };
 
+static const char string_fan_topic[] PROGMEM = "etherrape/plenar/fan";
+static const char string_status_led_topic[] PROGMEM = "etherrape/plenar/statusled";
+static const char string_locked_mode_topic[] PROGMEM = "etherrape/plenar/lock";
+
 
 static autoc4_output_config outputs[] = {
-  { PORT_INDEX_A, 4, string_output_1, false, false, true, false },
-  { PORT_INDEX_A, 5, string_output_2, false, false, true, false },
-  { PORT_INDEX_A, 6, string_output_3, false, false, true, false },
-  { PORT_INDEX_A, 7, string_output_4, false, false, true, false },
+  { PORT_INDEX_D, 0, string_output_1, false, false, true, false },
+  { PORT_INDEX_D, 4, string_output_2, false, false, true, false },
+  { PORT_INDEX_D, 6, string_output_3, false, false, true, false },
+  { PORT_INDEX_D, 2, string_output_4, false, false, true, false },
 };
 static autoc4_input_config inputs[] = {
-  { PORT_INDEX_D, 2, string_input_1, false, false, true  },
-  { PORT_INDEX_D, 3, string_input_2, true,  false, false },
-  { PORT_INDEX_D, 4, string_input_3, true,  false, false },
-  { PORT_INDEX_D, 5, string_input_4, true,  false, false },
-  { PORT_INDEX_D, 6, string_input_5, true,  false, false },
+  { PORT_INDEX_C, 7, string_input_1, true, false, true  },
+  { PORT_INDEX_C, 4, string_input_2, true, true,  false },
+  { PORT_INDEX_C, 0, string_input_3, true, true,  false },
+  { PORT_INDEX_C, 5, string_input_4, true, true,  false },
+  { PORT_INDEX_C, 1, string_input_5, true, true,  false },
 };
 static autoc4_dmx_config dmxs[] = {
   { string_dmx_1,  1, 8 },
@@ -57,6 +62,8 @@ static PGM_P const auto_subscribe_topics[] = {
   string_autosub_1,
   string_autosub_2,
   string_autosub_3,
+  string_autosub_4,
+  string_autosub_5,
   string_logicer_heartbeat_topic,
   string_subscribe_sudo,
   NULL

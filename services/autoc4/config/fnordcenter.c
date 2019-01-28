@@ -3,7 +3,9 @@
 static const char string_output_1[]  PROGMEM = "licht/fnord/links";
 static const char string_output_2[]  PROGMEM = "licht/fnord/rechts";
 
-static const char string_input_1[]   PROGMEM = "schalter/fnord/links";
+static const char string_input_1[]   PROGMEM = "schalter/fnord/vorne";
+static const char string_input_2[]   PROGMEM = "fenster/fnord/links";
+static const char string_input_3[]   PROGMEM = "fenster/fnord/rechts";
 
 static const char string_dmx_1[]     PROGMEM = "dmx/fnord/scummfenster";
 static const char string_dmx_2[]     PROGMEM = "dmx/fnord/schranklinks";
@@ -16,18 +18,23 @@ static const char string_autosub_3[] PROGMEM = "dmx/fnord";
 
 static const char string_client_id[] PROGMEM = "fnordcenter";
 static const char string_heartbeat_topic[] PROGMEM = "heartbeat/fnordcenter";
-static const char string_locked_mode_topic[] PROGMEM = "lock/fnord";
 static const char string_logicer_heartbeat_topic[] PROGMEM = "heartbeat/logicer";
 static const char string_subscribe_sudo[] PROGMEM = "sudo/#";
 static const uint8_t will_message[]  = { 0x00 };
 
+static const char string_fan_topic[] PROGMEM = "etherrape/fnordcenter/fan";
+static const char string_status_led_topic[] PROGMEM = "etherrape/fnordcenter/statusled";
+static const char string_locked_mode_topic[] PROGMEM = "etherrape/fnordcenter/lock";
+
 
 static autoc4_output_config outputs[] = {
-  { PORT_INDEX_A, 0, string_output_1, false, false, true, false },
-  { PORT_INDEX_A, 1, string_output_2, false, false, true, false },
+  { PORT_INDEX_D, 4, string_output_1, false, false, true, false },
+  { PORT_INDEX_D, 0, string_output_2, false, false, true, false },
 };
 static autoc4_input_config inputs[] = {
-  { PORT_INDEX_D, 2, string_input_1, true, false, true },
+  { PORT_INDEX_A, 7, string_input_1, true, false, true },
+  { PORT_INDEX_A, 4, string_input_2, true, true, false },
+  { PORT_INDEX_A, 0, string_input_3, true, true, false },
 };
 static autoc4_dmx_config dmxs[] = {
   { string_dmx_1,  1, 4 },
