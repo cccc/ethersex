@@ -161,7 +161,7 @@ ISR(usart(USART, _TX_vect))
 ISR(usart(USART, _UDRE_vect))
 {
   /* send DMX data bytes */
-  usart(UDR) = get_dmx_channel(DMX_OUTPUT_UNIVERSE, dmx_index++);
+  usart(UDR) = get_dmx_channel_raw(DMX_OUTPUT_UNIVERSE, dmx_index++);
 
   /* restart if end of universe is reached */
   if (dmx_index >= dmx_txlen)
