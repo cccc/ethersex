@@ -5,6 +5,8 @@ static const char string_output_2[]  PROGMEM = "licht/keller/loet";
 static const char string_output_3[]  PROGMEM = "licht/keller/vorne";
 static const char string_output_4[]  PROGMEM = "led/keller/werkbankkalt";
 static const char string_output_5[]  PROGMEM = "led/keller/werkbankwarm";
+static const char string_output_6[]  PROGMEM = "led/keller/hintenkalt";
+static const char string_output_7[]  PROGMEM = "led/keller/hintenwarm";
 
 static const char string_input_1[]   PROGMEM = "schalter/keller/1";
 static const char string_input_2[]   PROGMEM = "schalter/keller/2";
@@ -30,6 +32,8 @@ static autoc4_output_config outputs[] = {
   { PORT_INDEX_D, 5, string_output_3, false, false, true,  false },
   { PORT_INDEX_D, 2, string_output_4, false, true,  false, true  },
   { PORT_INDEX_D, 6, string_output_5, false, true,  false, true  },
+  { PORT_INDEX_C, 4, string_output_6, false, true,  false, true  },
+  { PORT_INDEX_C, 0, string_output_7, false, true,  false, true  },
 };
 static autoc4_input_config inputs[] = {
   { PORT_INDEX_A, 4, string_input_1, true, false, true },
