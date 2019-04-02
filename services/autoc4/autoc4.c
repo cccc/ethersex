@@ -179,6 +179,7 @@ static void autoc4_publish_callback(char const *topic,
   {
     // sudo message, ignore locked mode
     topic += sizeof(string_sudo_prefix) - 1;
+    topic_length -= sizeof(string_sudo_prefix) - 1;
     // fall through
   }
   else if (locked_mode)
