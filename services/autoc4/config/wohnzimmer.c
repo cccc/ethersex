@@ -20,6 +20,11 @@ static const char string_dmx_5[]     PROGMEM = "dmx/wohnzimmer/tuer2";
 static const char string_dmx_6[]     PROGMEM = "dmx/wohnzimmer/tuer3";
 static const char string_dmx_7[]     PROGMEM = "dmx/wohnzimmer/gang";
 static const char string_dmx_8[]     PROGMEM = "dmx/wohnzimmer/baellebad";
+static const char string_dmx_9[]     PROGMEM = "dmx/wohnzimmer/chaosknoten";
+static const char string_dmx_10[]    PROGMEM = "dmx/wohnzimmer/spuele2";
+static const char string_dmx_11[]    PROGMEM = "dmx/wohnzimmer/spuele1";
+static const char string_dmx_12[]    PROGMEM = "dmx/wohnzimmer/tresen";
+static const char string_dmx_13[]    PROGMEM = "dmx/wohnzimmer/tresen2";
 
 static const char string_autosub_1[] PROGMEM = "licht/wohnzimmer/+";
 static const char string_autosub_2[] PROGMEM = "dmx/wohnzimmer/+";
@@ -53,14 +58,19 @@ static autoc4_input_config inputs[] = {
   { PORT_INDEX_A, 5, string_input_5, true,  true,  false },
 };
 static autoc4_dmx_config dmxs[] = {
-  { string_dmx_1,  1, 8 },
-  { string_dmx_2,  9, 8 },
-  { string_dmx_3, 17, 8 },
-  { string_dmx_4, 25, 8 },
-  { string_dmx_5, 33, 8 },
-  { string_dmx_6, 41, 8 },
-  { string_dmx_7, 49, 8 },
-  { string_dmx_8, 57, 8 },
+  { string_dmx_1,   1, 8 },
+  { string_dmx_2,   9, 8 },
+  { string_dmx_3,  17, 8 },
+  { string_dmx_4,  25, 8 },
+  { string_dmx_5,  33, 8 },
+  { string_dmx_6,  41, 8 },
+  { string_dmx_7,  49, 8 },
+  { string_dmx_8,  57, 8 },
+  { string_dmx_9,  65, 3 },
+  { string_dmx_10, 68, 3 },
+  { string_dmx_11, 71, 4 },
+  { string_dmx_12, 75, 4 },
+  { string_dmx_13, 79, 4 },
 };
 static PGM_P const auto_subscribe_topics[] = {
   string_autosub_1,
