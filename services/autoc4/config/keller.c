@@ -10,6 +10,10 @@ static const char string_output_7[]  PROGMEM = "led/keller/hintenwarm";
 
 static const char string_input_1[]   PROGMEM = "schalter/keller/1";
 static const char string_input_2[]   PROGMEM = "schalter/keller/2";
+static const char string_input_3[]   PROGMEM = "schalter/keller/3";
+static const char string_input_4[]   PROGMEM = "schalter/keller/4";
+static const char string_input_5[]   PROGMEM = "schalter/keller/hinten1";
+static const char string_input_6[]   PROGMEM = "schalter/keller/hinten2";
 
 static const char string_autosub_1[] PROGMEM = "licht/keller/+";
 static const char string_autosub_2[] PROGMEM = "led/keller/+";
@@ -36,8 +40,12 @@ static autoc4_output_config outputs[] = {
   { PORT_INDEX_C, 0, string_output_7, false, true,  false, true  },
 };
 static autoc4_input_config inputs[] = {
-  { PORT_INDEX_A, 4, string_input_1, true, false, true },
-  { PORT_INDEX_A, 0, string_input_2, true, false, true },
+  { PORT_INDEX_A, 4, string_input_1, true, false, true  },
+  { PORT_INDEX_A, 0, string_input_2, true, false, true  },
+  { PORT_INDEX_A, 5, string_input_3, true, false, false },
+  { PORT_INDEX_A, 1, string_input_4, true, false, false },
+  { PORT_INDEX_A, 7, string_input_5, true, false, false },
+  { PORT_INDEX_A, 3, string_input_6, true, false, false },
 };
 static autoc4_dmx_config dmxs[] = {
 };
